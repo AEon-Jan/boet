@@ -1,0 +1,14 @@
+<!-- 📄 /README.md -->
+
+# Twitch Voice Panel
+
+🗣️ Echtzeit Sprachbot für Twitch mit Whisper, GPT & ElevenLabs.  
+🌐 Steuerung über ein modulares React-Panel.  
+🐳 Vollständig dockerisiert – keine Host-Abhängigkeiten.
+
+---
+
+## 🔧 Setup (Entwicklung)
+
+```bash
+docker compose -f deploy/docker-compose.yml up -d

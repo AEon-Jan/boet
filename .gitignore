@@ -1,0 +1,11 @@
+# 📄 /.gitignore
+/vendor
+/node_modules
+/.env
+/.env.*
+/panel/dist
+/deploy/certs
+/storage
+/bootstrap/cache
+.idea
+.DS_Store
