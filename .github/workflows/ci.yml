@@ -9,24 +9,29 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-test:
+  build-and-lint:
     runs-on: ubuntu-latest
 
     services:
       redis:
         image: redis:7-alpine
-        ports: [ "6379:6379" ]
+        ports:
+          - "6379:6379"
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Build Laravel Gateway
-        run: docker build -f deploy/docker-compose.yml .
+      - name: Build Docker services (gateway & panel)
+        run: |
+          docker compose -f deploy/docker-compose.yml build
 
       - name: Laravel Pint (Code Style)
         run: |
-          docker run --rm -v $PWD/gateway:/app -w /app laravelsail/php82-composer:latest \
+          docker run --rm -v ${{ github.workspace }}/gateway:/app -w /app laravelsail/php82-composer:latest \
           bash -c "composer global require laravel/pint && ~/.composer/vendor/bin/pint"
+
+      - name: Vite Lint (ESLint)
+        run: |
+          docker run --rm -v ${{ github.workspace }}/panel:/app -w /app node:20-alpine \
+          sh -c "npm install && npm run lint || true"
